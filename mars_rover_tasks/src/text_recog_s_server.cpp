@@ -9,7 +9,8 @@
 #include <rclcpp/rclcpp.hpp>
 
 #include <sensor_msgs/msg/image.hpp>
-#include <std_srvs/srv/trigger.hpp>
+
+#include <custom_interfaces/srv/text_recognition.hpp>
 
 class TextRecognitionService : public rclcpp::Node {
 public:
@@ -17,7 +18,7 @@ public:
 
     // Create a service that will handle status queries
     std::string name_service = "/text_recognition_service";
-    service_ = this->create_service<std_srvs::srv::Trigger>(
+    service_ = this->create_service<custom_interfaces::srv::TextRecognition>(
         name_service,
         std::bind(&TextRecognitionService::get_status_callback, this,
                   std::placeholders::_1, std::placeholders::_2));
@@ -74,13 +75,14 @@ private:
 
         // Simulate text recognition (replace with actual OCR)
         detected_text_ = simulateTextRecognition(roi);
-
         if (!detected_text_.empty()) {
+          start_x_ = bounding_rect.x;
+          start_y_ = bounding_rect.y;
+          end_x_ = start_x_ + bounding_rect.width;
+          end_y_ = start_y_ + bounding_rect.height;
           std::string position =
-              std::to_string(bounding_rect.x) + "-" +
-              std::to_string(bounding_rect.y) + "-" +
-              std::to_string(bounding_rect.x + bounding_rect.width) + "-" +
-              std::to_string(bounding_rect.y + bounding_rect.height);
+              std::to_string(start_x_) + "-" + std::to_string(start_y_) + "-" +
+              std::to_string(end_x_) + "-" + std::to_string(end_y_);
 
           //   RCLCPP_INFO(this->get_logger(), "OCR Result: %s, (%s)",
           //               detected_text_.c_str(), position.c_str());
@@ -109,9 +111,11 @@ private:
 
 private:
   void get_status_callback(
-      const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
-      std::shared_ptr<std_srvs::srv::Trigger::Response> response) {
-    (void)request; // Suppress unused parameter warning
+      const std::shared_ptr<custom_interfaces::srv::TextRecognition::Request>
+          request,
+      std::shared_ptr<custom_interfaces::srv::TextRecognition::Response>
+          response) {
+    // (void)request; // Suppress unused parameter warning
 
     // Convert ROS image to OpenCV image
     cv_bridge::CvImagePtr cv_ptr;
@@ -126,25 +130,35 @@ private:
     // Perform text detection
     detectText(cv_ptr->image);
 
-    if (detected_text_ == "FOOD" || detected_text_ == "WASTE") {
+    if (detected_text_ == request->label) {
       // Construct response message
       response->success = true;
-      response->message = "Result: " + detected_text_;
+      response->start_x = start_x_;
+      response->start_y = start_y_;
+      response->end_x = end_x_;
+      response->end_y = end_y_;
       RCLCPP_INFO(this->get_logger(), "Result: %s", detected_text_.c_str());
     } else {
       response->success = false;
-      response->message = "Result: " + detected_text_;
+      response->start_x = 0;
+      response->start_y = 0;
+      response->end_x = 0;
+      response->end_y = 0;
       RCLCPP_INFO(this->get_logger(), "Result: %s", detected_text_.c_str());
     }
   }
 
-  rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr service_;
+  rclcpp::Service<custom_interfaces::srv::TextRecognition>::SharedPtr service_;
   rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_subscriber_;
   sensor_msgs::msg::Image::SharedPtr latest_image_msg_;
   std::string detected_text_;
   //   cv::dnn::Net net_;
   float confidence_threshold_;
   float nms_threshold_;
+  int start_x_;
+  int start_y_;
+  int end_x_;
+  int end_y_;
 };
 
 int main(int argc, char **argv) {

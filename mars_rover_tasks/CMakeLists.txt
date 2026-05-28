@@ -12,6 +12,7 @@ find_package(sensor_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(std_srvs REQUIRED)
+find_package(custom_interfaces REQUIRED)
 
 # Add the executable
 add_executable(text_recog_executable src/text_recog_node.cpp)
@@ -37,7 +38,7 @@ ament_target_dependencies(text_recog_s_server_executable
   sensor_msgs
   cv_bridge
   OpenCV
-  std_srvs
+  custom_interfaces
 )
 
 ament_target_dependencies(mars_rover_status_s_client_executable
@@ -47,7 +48,7 @@ ament_target_dependencies(mars_rover_status_s_client_executable
 
 ament_target_dependencies(text_recog_s_client_executable
   rclcpp
-  std_srvs
+  custom_interfaces
 )
 
 
