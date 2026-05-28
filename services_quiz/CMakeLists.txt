@@ -13,6 +13,7 @@ find_package(geometry_msgs REQUIRED)
 
 # Add the executable
 add_executable(turn_server_executable src/turn_s_server.cpp)
+add_executable(turn_client_executable src/turn_s_client.cpp)
 
 ament_target_dependencies(turn_server_executable
   rclcpp
@@ -20,9 +21,15 @@ ament_target_dependencies(turn_server_executable
   services_quiz_srv
 )
 
+ament_target_dependencies(turn_client_executable
+  rclcpp
+  services_quiz_srv
+)
+
 # Install the executable
 install(TARGETS
   turn_server_executable
+  turn_client_executable
   DESTINATION lib/${PROJECT_NAME}
 )
 
