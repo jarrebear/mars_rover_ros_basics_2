@@ -17,6 +17,8 @@ find_package(std_srvs REQUIRED)
 add_executable(text_recog_executable src/text_recog_node.cpp)
 add_executable(mars_rover_s_server_executable src/mars_rover_status_s_server.cpp)
 add_executable(text_recog_s_server_executable src/text_recog_s_server.cpp)
+add_executable(mars_rover_status_s_client_executable src/mars_rover_status_s_client.cpp)
+add_executable(text_recog_s_client_executable src/text_recog_s_client.cpp)
 
 ament_target_dependencies(text_recog_executable
   rclcpp
@@ -38,11 +40,24 @@ ament_target_dependencies(text_recog_s_server_executable
   std_srvs
 )
 
+ament_target_dependencies(mars_rover_status_s_client_executable
+  rclcpp
+  std_srvs
+)
+
+ament_target_dependencies(text_recog_s_client_executable
+  rclcpp
+  std_srvs
+)
+
+
 # Install the executable
 install(TARGETS
   text_recog_executable
   mars_rover_s_server_executable
   text_recog_s_server_executable
+  mars_rover_status_s_client_executable
+  text_recog_s_client_executable
   DESTINATION lib/${PROJECT_NAME}
 )
 
