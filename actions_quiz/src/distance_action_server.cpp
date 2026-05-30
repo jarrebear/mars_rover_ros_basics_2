@@ -4,15 +4,11 @@
 #include <memory>
 #include <thread>
 
-#include "action_msgs/msg/goal_status.hpp"
 #include "actions_quiz_msg/action/distance.hpp"
 #include "geometry_msgs/msg/pose_with_covariance_stamped.hpp"
-#include "leo_description/action/go_to_pose.hpp"
 #include "nav2_msgs/action/navigate_to_pose.hpp"
-#include "nav_msgs/msg/detail/odometry__struct.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_action/rclcpp_action.hpp"
-#include "std_msgs/msg/detail/float64__struct.hpp"
 #include "tf2/LinearMath/Quaternion.h"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 #include <nav_msgs/msg/odometry.hpp>

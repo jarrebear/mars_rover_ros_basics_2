@@ -30,7 +30,15 @@ ament_target_dependencies(distance_server_executable
   "action_msgs"
   "actions_quiz_msg")
 
-install(TARGETS distance_server_executable
+add_executable(distance_client_executable src/distance_action_client.cpp)
+ament_target_dependencies(distance_client_executable
+  "rclcpp"
+  "rclcpp_action"
+  "actions_quiz_msg")
+
+install(TARGETS 
+  distance_server_executable
+  distance_client_executable
   DESTINATION lib/${PROJECT_NAME})
 
 install(DIRECTORY launch
