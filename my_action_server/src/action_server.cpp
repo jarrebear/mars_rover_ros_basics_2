@@ -4,8 +4,8 @@
 #include <thread>
 
 #include "action_msgs/msg/goal_status.hpp"
+#include "custom_interfaces/action/go_to_pose.hpp"
 #include "geometry_msgs/msg/pose_with_covariance_stamped.hpp"
-#include "leo_description/action/go_to_pose.hpp"
 #include "nav2_msgs/action/navigate_to_pose.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_action/rclcpp_action.hpp"
@@ -14,7 +14,7 @@
 
 class MyActionServer : public rclcpp::Node {
 public:
-  using GoToPose = leo_description::action::GoToPose;
+  using GoToPose = custom_interfaces::action::GoToPose;
   using GoalHandleGoToPose = rclcpp_action::ServerGoalHandle<GoToPose>;
   using NavigateToPose = nav2_msgs::action::NavigateToPose;
   using GoalHandleNavigateToPose =

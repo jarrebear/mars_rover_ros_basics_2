@@ -10,20 +10,33 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(leo_description REQUIRED)
+find_package(custom_interfaces REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(gazebo_msgs REQUIRED)
 
 add_executable(action_client_executable src/action_client.cpp)
+add_executable(custom_aciton_client_executable src/custom_action_client.cpp)
 
 ament_target_dependencies(action_client_executable
   "rclcpp"
   "rclcpp_action"
   "leo_description")
 
-install(TARGETS action_client_executable
+ament_target_dependencies(custom_aciton_client_executable
+  "rclcpp"
+  "rclcpp_action"
+  "custom_interfaces"
+  "nav_msgs"
+  "gazebo_msgs"
+  "custom_interfaces")
+
+install(TARGETS 
+  action_client_executable
+  custom_aciton_client_executable
   DESTINATION lib/${PROJECT_NAME})
 
 install(DIRECTORY launch
   DESTINATION share/${PROJECT_NAME}/)
-
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

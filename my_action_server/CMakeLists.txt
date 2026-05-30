@@ -15,6 +15,7 @@ find_package(nav2_msgs REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(action_msgs REQUIRED)
+find_package(custom_interfaces REQUIRED)
 
 add_executable(action_server src/action_server.cpp)
 ament_target_dependencies(action_server
@@ -25,7 +26,8 @@ ament_target_dependencies(action_server
   "nav2_msgs"
   "tf2"
   "tf2_geometry_msgs"
-  "action_msgs")
+  "action_msgs"
+  "custom_interfaces")
 
 install(TARGETS action_server
   DESTINATION lib/${PROJECT_NAME})
